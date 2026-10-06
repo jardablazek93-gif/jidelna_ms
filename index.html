@@ -30,7 +30,7 @@
             margin: 0 auto;
         }
 
-        header { text-align: center; padding: 1.5rem 0 1rem 0; }
+        header { text-align: center; padding: 1.25rem 0 0.75rem 0; }
         h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); }
         .subtitle { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
 
@@ -87,6 +87,15 @@
             background: linear-gradient(to bottom, #FFFFFF, var(--primary-light));
         }
 
+        .day-card.past {
+            display: none; /* Skryje starší dny */
+            opacity: 0.75;
+        }
+
+        .day-card.past.show {
+            display: block;
+        }
+
         .day-header {
             display: flex;
             justify-content: space-between;
@@ -127,6 +136,19 @@
 
         .meal-desc { font-size: 0.9375rem; line-height: 1.45; color: #334155; }
 
+        .toggle-past-btn {
+            display: block;
+            margin: 0 auto 1rem auto;
+            background: transparent;
+            border: 1px dashed var(--text-muted);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
         .footer-info {
             text-align: center;
             font-size: 0.75rem;
@@ -150,6 +172,10 @@
         <button class="btn" id="btn-next-week" onclick="switchWeek('next')">Příští týden</button>
     </div>
 
+    <button id="toggle-past" class="toggle-past-btn" style="display: none;" onclick="togglePastDays()">
+        Zobrazit proběhlé dny
+    </button>
+
     <div id="content">
         <div class="status-box">Načítám data...</div>
     </div>
@@ -161,11 +187,11 @@
     <script>
         let menuData = { this: [], next: [] };
         let activeWeek = 'this';
+        let showPast = false;
 
         async function loadMenu() {
             const container = document.getElementById('content');
             try {
-                // Načtení statického data.json vygenerovaného GitHub Actions
                 const response = await fetch('data.json?cache=' + new Date().getTime());
                 if (!response.ok) throw new Error('data.json nenalezeno');
                 
@@ -175,31 +201,41 @@
                 console.error(err);
                 container.innerHTML = `
                     <div class="status-box">
-                        <p style="color: #DC2626; font-weight: 600;">Data jídelníčku zatím nejsou připravena.</p>
-                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">První automatické stažení proběhne po spuštění GitHub Action.</p>
+                        <p style="color: #DC2626; font-weight: 600;">Data jídelníčku nejsou k dispozici.</p>
                     </div>`;
             }
         }
 
         function renderMenu() {
             const container = document.getElementById('content');
+            const pastBtn = document.getElementById('toggle-past');
             container.innerHTML = '';
 
             const days = menuData[activeWeek] || [];
 
             if (days.length === 0) {
                 container.innerHTML = `<div class="status-box">Pro tento týden nejsou k dispozici žádná data.</div>`;
+                pastBtn.style.display = 'none';
                 return;
             }
 
-            const today = new Date();
-            const todayStr = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+            const now = new Date();
+            const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            let hasPastDays = false;
 
             days.forEach(d => {
-                const isToday = d.dateStr.replace(/\s+/g, '') === todayStr;
+                // Převod dateStr (DD.MM.YYYY) na JS Date
+                const parts = d.dateStr.split('.');
+                const dayDate = new Date(parts[2], parts[1] - 1, parts[0]);
+
+                const isToday = dayDate.getTime() === todayMidnight.getTime();
+                const isPast = dayDate < todayMidnight && activeWeek === 'this';
+
+                if (isPast) hasPastDays = true;
 
                 const card = document.createElement('div');
-                card.className = `day-card ${isToday ? 'today' : ''}`;
+                card.className = `day-card ${isToday ? 'today' : ''} ${isPast ? 'past' : ''} ${isPast && showPast ? 'show' : ''}`;
 
                 card.innerHTML = `
                     <div class="day-header">
@@ -227,6 +263,19 @@
                 `;
                 container.appendChild(card);
             });
+
+            // Zobrazení tlačítka na starší dny
+            if (activeWeek === 'this' && hasPastDays) {
+                pastBtn.style.display = 'block';
+                pastBtn.textContent = showPast ? 'Skrýt proběhlé dny' : 'Zobrazit i proběhlé dny týdne';
+            } else {
+                pastBtn.style.display = 'none';
+            }
+        }
+
+        function togglePastDays() {
+            showPast = !showPast;
+            renderMenu();
         }
 
         function switchWeek(week) {
