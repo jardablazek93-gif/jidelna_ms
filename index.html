@@ -30,11 +30,7 @@
             margin: 0 auto;
         }
 
-        header {
-            text-align: center;
-            padding: 1.5rem 0 1rem 0;
-        }
-
+        header { text-align: center; padding: 1.5rem 0 1rem 0; }
         h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); }
         .subtitle { font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
 
@@ -75,20 +71,6 @@
             border-radius: 1rem;
             border: 1px solid var(--border);
             color: var(--text-muted);
-        }
-
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 1rem auto;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
 
         .day-card {
@@ -154,24 +136,13 @@
         }
 
         .footer-info a { color: var(--primary); text-decoration: none; }
-        
-        .btn-retry {
-            margin-top: 1rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>MŠ Praha 5 – Nad Palatou</h1>
-        <div class="subtitle">Jídelna 6724 • Živý přehled ze Strava.cz</div>
+        <div class="subtitle">Jídelna 6724 • Přehled jídelníčku</div>
     </header>
 
     <div class="nav-controls">
@@ -180,134 +151,52 @@
     </div>
 
     <div id="content">
-        <div class="status-box">
-            <div class="spinner"></div>
-            Načítám aktuální jídelníček ze Strava.cz...
-        </div>
+        <div class="status-box">Načítám data...</div>
     </div>
 
     <div class="footer-info">
-        Data načítána živě z <a href="https://app.strava.cz/jidelnicky?jidelna=6724" target="_blank">Strava.cz (Jídelna 6724)</a>
+        Zdroj: <a href="https://app.strava.cz/jidelnicky?jidelna=6724" target="_blank">Strava.cz (Jídelna 6724)</a>
     </div>
 
     <script>
-        const TARGET_URL = 'https://app.strava.cz/jidelnicky?jidelna=6724';
-        const PROXY_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(TARGET_URL);
-
-        let parsedWeeks = {
-            this: [],
-            next: []
-        };
+        let menuData = { this: [], next: [] };
         let activeWeek = 'this';
 
-        async function fetchMenuData() {
+        async function loadMenu() {
             const container = document.getElementById('content');
-            container.innerHTML = `
-                <div class="status-box">
-                    <div class="spinner"></div>
-                    Načítám aktuální jídelníček ze Strava.cz...
-                </div>`;
-
             try {
-                const response = await fetch(PROXY_URL);
-                if (!response.ok) throw new Error('Chyba sítě při načítání přes proxy');
+                // Načtení statického data.json vygenerovaného GitHub Actions
+                const response = await fetch('data.json?cache=' + new Date().getTime());
+                if (!response.ok) throw new Error('data.json nenalezeno');
                 
-                const data = await response.json();
-                const htmlText = data.contents;
-
-                parseStravaHTML(htmlText);
-
-                if (parsedWeeks.this.length === 0 && parsedWeeks.next.length === 0) {
-                    throw new Error('Nenalezena žádná data jídelníčku');
-                }
-
+                menuData = await response.json();
                 renderMenu();
             } catch (err) {
                 console.error(err);
                 container.innerHTML = `
                     <div class="status-box">
-                        <p style="color: #DC2626; font-weight: 600;">Nepodařilo se živě načíst data ze Strava.cz.</p>
-                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Důvodem může být výpadek CORS proxy nebo změna na straně Strava.cz.</p>
-                        <button class="btn-retry" onclick="fetchMenuData()">Zkusit znovu</button>
+                        <p style="color: #DC2626; font-weight: 600;">Data jídelníčku zatím nejsou připravena.</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">První automatické stažení proběhne po spuštění GitHub Action.</p>
                     </div>`;
             }
-        }
-
-        function parseStravaHTML(html) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-
-            // Vyhledáme dny a jídla v DOMu
-            const textContent = doc.body.innerText || doc.body.textContent;
-            
-            // Regex pro záchyt celých dnů a jejich jídel
-            const dayRegex = /(Pondělí|Úterý|Středa|Čtvrtek|Pátek)\s+(\d{1,2}\.\s*\d{1,2}\.\s*\d{4})([\s\S]*?)(?=(Pondělí|Úterý|Středa|Čtvrtek|Pátek|\bVIS Plzeň\b|$))/gi;
-            
-            let match;
-            const allDays = [];
-
-            while ((match = dayRegex.exec(textContent)) !== null) {
-                const dayName = match[1];
-                const dayDate = match[2];
-                const dayContent = match[3];
-
-                const presnidavka = extractMeal(dayContent, 'Přesnídávka');
-                const polevka = extractMeal(dayContent, 'Polévka');
-                const obed = extractMeal(dayContent, 'Oběd MŠ');
-                const svacina = extractMeal(dayContent, 'Svačina');
-
-                if (presnidavka || polevka || obed || svacina) {
-                    allDays.push({
-                        title: `${dayName} ${dayDate}`,
-                        dateStr: dayDate,
-                        presnidavka: presnidavka || 'Není uvedeno',
-                        polevka: polevka || 'Není uvedeno',
-                        obed: obed || 'Není uvedeno',
-                        svacina: svacina || 'Není uvedeno'
-                    });
-                }
-            }
-
-            // Rozdělení jídel na 1. a 2. týden
-            if (allDays.length <= 5) {
-                parsedWeeks.this = allDays;
-                parsedWeeks.next = [];
-            } else {
-                parsedWeeks.this = allDays.slice(0, 5);
-                parsedWeeks.next = allDays.slice(5, 10);
-            }
-        }
-
-        function extractMeal(text, mealName) {
-            const regex = new RegExp(mealName + '\\s*(?:-\\s*)?([^\\n]+)', 'i');
-            const match = text.match(regex);
-            if (!match) return null;
-
-            let result = match[1].trim();
-            // Odstranění informací o alergenech pro čistší vzhled
-            result = result.replace(/\(Alergeny:.*?\)/gi, '').trim();
-            return result.length > 0 ? result : null;
         }
 
         function renderMenu() {
             const container = document.getElementById('content');
             container.innerHTML = '';
 
-            const days = parsedWeeks[activeWeek];
+            const days = menuData[activeWeek] || [];
 
-            if (!days || days.length === 0) {
-                container.innerHTML = `
-                    <div class="status-box">
-                        Pro tento týden nejsou v systému Strava.cz zatím zadána žádná data.
-                    </div>`;
+            if (days.length === 0) {
+                container.innerHTML = `<div class="status-box">Pro tento týden nejsou k dispozici žádná data.</div>`;
                 return;
             }
 
             const today = new Date();
-            const todayStr = `${today.getDate()}. ${today.getMonth() + 1}. ${today.getFullYear()}`;
+            const todayStr = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
 
             days.forEach(d => {
-                const isToday = d.dateStr.replace(/\s+/g, '') === todayStr.replace(/\s+/g, '');
+                const isToday = d.dateStr.replace(/\s+/g, '') === todayStr;
 
                 const card = document.createElement('div');
                 card.className = `day-card ${isToday ? 'today' : ''}`;
@@ -347,8 +236,7 @@
             renderMenu();
         }
 
-        // Spuštění živého načtení při otevření stránky
-        fetchMenuData();
+        loadMenu();
     </script>
 </body>
 </html>
