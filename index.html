@@ -14,7 +14,7 @@
             --primary: #2563EB;
             --primary-light: #EFF6FF;
             --border: #E2E8F0;
-            --presnidavka: #F59E0B;
+            --presnidavka: #D97706;
             --polevka: #059669;
             --obed: #DC2626;
             --svacina: #7C3AED;
@@ -32,8 +32,7 @@
 
         header {
             text-align: center;
-            padding: 1.5rem 0;
-            margin-bottom: 1rem;
+            padding: 1.5rem 0 1rem 0;
         }
 
         h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); }
@@ -43,9 +42,9 @@
             display: flex;
             justify-content: center;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            background: #F1F5F9;
-            padding: 0.375rem;
+            margin: 1.25rem 0;
+            background: #E2E8F0;
+            padding: 0.25rem;
             border-radius: 9999px;
         }
 
@@ -66,7 +65,30 @@
         .btn.active {
             background: var(--card-bg);
             color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .status-box {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .day-card {
@@ -75,7 +97,7 @@
             padding: 1.25rem;
             margin-bottom: 1rem;
             border: 1px solid var(--border);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
 
         .day-card.today {
@@ -92,8 +114,7 @@
             margin-bottom: 1rem;
         }
 
-        .day-name { font-weight: 700; font-size: 1.125rem; }
-        .day-date { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; }
+        .day-title { font-weight: 700; font-size: 1.125rem; }
         .badge-today {
             background: var(--primary);
             color: white;
@@ -111,7 +132,7 @@
             font-weight: 700;
             padding: 0.25rem 0.625rem;
             border-radius: 0.375rem;
-            min-width: 100px;
+            min-width: 105px;
             text-align: center;
             text-transform: uppercase;
             flex-shrink: 0;
@@ -122,7 +143,7 @@
         .tag-obed { background: #FEE2E2; color: var(--obed); }
         .tag-svacina { background: #EDE9FE; color: var(--svacina); }
 
-        .meal-desc { font-size: 0.9375rem; line-height: 1.4; color: #334155; }
+        .meal-desc { font-size: 0.9375rem; line-height: 1.45; color: #334155; }
 
         .footer-info {
             text-align: center;
@@ -133,13 +154,24 @@
         }
 
         .footer-info a { color: var(--primary); text-decoration: none; }
+        
+        .btn-retry {
+            margin-top: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>MŠ Praha 5 – Nad Palatou</h1>
-        <div class="subtitle">Jídelna 6724 • Přehled stravy pro MŠ</div>
+        <div class="subtitle">Jídelna 6724 • Živý přehled ze Strava.cz</div>
     </header>
 
     <div class="nav-controls">
@@ -147,112 +179,142 @@
         <button class="btn" id="btn-next-week" onclick="switchWeek('next')">Příští týden</button>
     </div>
 
-    <div id="content"></div>
+    <div id="content">
+        <div class="status-box">
+            <div class="spinner"></div>
+            Načítám aktuální jídelníček ze Strava.cz...
+        </div>
+    </div>
 
     <div class="footer-info">
-        Zdroj dat: <a href="https://app.strava.cz/jidelnicky?jidelna=6724" target="_blank">Strava.cz (Jídelna 6724)</a>
+        Data načítána živě z <a href="https://app.strava.cz/jidelnicky?jidelna=6724" target="_blank">Strava.cz (Jídelna 6724)</a>
     </div>
 
     <script>
-        // Data MŠ Nad Palatou (Jídelna 6724)
-        const menuData = {
-            "this": [
-                {
-                    day: "Pondělí", date: "5. 10. 2026",
-                    presnidavka: "Cereálie s mlékem, Ovoce, Ovocný čaj",
-                    polevka: "Zeleninová polévka s jáhly",
-                    obed: "Vepřové Švej-ču-žou s jasmínovou rýží, Ovocný čaj",
-                    svacina: "Kornspitz s rybičkovou pomazánkou, Zelenina, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Úterý", date: "6. 10. 2026",
-                    presnidavka: "Houska s máslem a plátkovým sýrem, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Kapustová s paprikou a brambory",
-                    obed: "Kovbojské pečené fazole s celozrnným chlebem, Šopský salát, Ovocný čaj",
-                    svacina: "Pudink s piškoty, Ovoce, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Středa", date: "7. 10. 2026",
-                    presnidavka: "Jogurt, Rohlík, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Květáková polévka s krutony",
-                    obed: "Smažený kuřecí řízek s vařenými brambory s pažitkou, Čerstvá zelenina, Ovocný čaj",
-                    svacina: "Špaldovo-jablkový řez, Ovoce, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Čtvrtek", date: "8. 10. 2026",
-                    presnidavka: "Cereální houska s lučinou, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Česneková polévka s bramborem a vejcem",
-                    obed: "Hovězí pečeně ''Sous-vide'' s rajskou omáčkou a těstovinami, Ovocný čaj",
-                    svacina: "Celozrnný kváskový chléb s pomazánkovým máslem, Ovoce, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Pátek", date: "9. 10. 2026",
-                    presnidavka: "Chléb Šumava s máslem a krůtí šunkou, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Slepičí vývar s nudlemi",
-                    obed: "Vepřová játra dušená na cibulce s divokou rýží, Ovocný čaj",
-                    svacina: "Mistrův chléb se sýrovou pomazánkou, Ovoce, Mléko, Ovocný čaj"
-                }
-            ],
-            "next": [
-                {
-                    day: "Pondělí", date: "12. 10. 2026",
-                    presnidavka: "Vánočka s máslem, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Pórková polévka s kapáním",
-                    obed: "Kynuté knedlíky plněné ovocem přelité máslem a sypané cukrem, Ovocný čaj",
-                    svacina: "Chléb Šumava s rybičkovou pomazánkou, Zelenina, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Úterý", date: "13. 10. 2026",
-                    presnidavka: "Cereální houska s lučinou, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Čočková polévka s krutony",
-                    obed: "Sekaná pečeně s vařenými brambory, Obloha, Ovocný čaj",
-                    svacina: "Chléb Šumava s máslem a plátkovým sýrem, Ovoce, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Středa", date: "14. 10. 2026",
-                    presnidavka: "Jogurt, Rohlík, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Rajčatová polévka s rýží",
-                    obed: "Vepřové maso dušené v kapustě s vařenými brambory, Ovocný čaj",
-                    svacina: "Mistrův chléb, Vajíčková pomazánka, Zelenina, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Čtvrtek", date: "15. 10. 2026",
-                    presnidavka: "Bagetka s máslem a zeleninou, Mléko, Ovocný čaj",
-                    polevka: "Zeleninová polévka s hrachovými vločkami",
-                    obed: "Krůtí nudličky s pórkem, paprikami a rajčaty s jasmínovou rýží, Ovocný čaj",
-                    svacina: "Pudink s piškoty, Ovoce, Mléko, Ovocný čaj"
-                },
-                {
-                    day: "Pátek", date: "16. 10. 2026",
-                    presnidavka: "Grahamový rohlík s máslem a medem, Ovoce, Mléko, Ovocný čaj",
-                    polevka: "Kuřecí polévka s jáhly",
-                    obed: "Hovězí svíčková na smetaně s houskovými knedlíky, Ovocný čaj",
-                    svacina: "Chléb Šumava s máslem a šunkou, Ovoce, Mléko, Ovocný čaj"
-                }
-            ]
-        };
+        const TARGET_URL = 'https://app.strava.cz/jidelnicky?jidelna=6724';
+        const PROXY_URL = 'https://api.allorigins.win/get?url=' + encodeURIComponent(TARGET_URL);
 
-        let currentWeek = 'this';
+        let parsedWeeks = {
+            this: [],
+            next: []
+        };
+        let activeWeek = 'this';
+
+        async function fetchMenuData() {
+            const container = document.getElementById('content');
+            container.innerHTML = `
+                <div class="status-box">
+                    <div class="spinner"></div>
+                    Načítám aktuální jídelníček ze Strava.cz...
+                </div>`;
+
+            try {
+                const response = await fetch(PROXY_URL);
+                if (!response.ok) throw new Error('Chyba sítě při načítání přes proxy');
+                
+                const data = await response.json();
+                const htmlText = data.contents;
+
+                parseStravaHTML(htmlText);
+
+                if (parsedWeeks.this.length === 0 && parsedWeeks.next.length === 0) {
+                    throw new Error('Nenalezena žádná data jídelníčku');
+                }
+
+                renderMenu();
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `
+                    <div class="status-box">
+                        <p style="color: #DC2626; font-weight: 600;">Nepodařilo se živě načíst data ze Strava.cz.</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Důvodem může být výpadek CORS proxy nebo změna na straně Strava.cz.</p>
+                        <button class="btn-retry" onclick="fetchMenuData()">Zkusit znovu</button>
+                    </div>`;
+            }
+        }
+
+        function parseStravaHTML(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Vyhledáme dny a jídla v DOMu
+            const textContent = doc.body.innerText || doc.body.textContent;
+            
+            // Regex pro záchyt celých dnů a jejich jídel
+            const dayRegex = /(Pondělí|Úterý|Středa|Čtvrtek|Pátek)\s+(\d{1,2}\.\s*\d{1,2}\.\s*\d{4})([\s\S]*?)(?=(Pondělí|Úterý|Středa|Čtvrtek|Pátek|\bVIS Plzeň\b|$))/gi;
+            
+            let match;
+            const allDays = [];
+
+            while ((match = dayRegex.exec(textContent)) !== null) {
+                const dayName = match[1];
+                const dayDate = match[2];
+                const dayContent = match[3];
+
+                const presnidavka = extractMeal(dayContent, 'Přesnídávka');
+                const polevka = extractMeal(dayContent, 'Polévka');
+                const obed = extractMeal(dayContent, 'Oběd MŠ');
+                const svacina = extractMeal(dayContent, 'Svačina');
+
+                if (presnidavka || polevka || obed || svacina) {
+                    allDays.push({
+                        title: `${dayName} ${dayDate}`,
+                        dateStr: dayDate,
+                        presnidavka: presnidavka || 'Není uvedeno',
+                        polevka: polevka || 'Není uvedeno',
+                        obed: obed || 'Není uvedeno',
+                        svacina: svacina || 'Není uvedeno'
+                    });
+                }
+            }
+
+            // Rozdělení jídel na 1. a 2. týden
+            if (allDays.length <= 5) {
+                parsedWeeks.this = allDays;
+                parsedWeeks.next = [];
+            } else {
+                parsedWeeks.this = allDays.slice(0, 5);
+                parsedWeeks.next = allDays.slice(5, 10);
+            }
+        }
+
+        function extractMeal(text, mealName) {
+            const regex = new RegExp(mealName + '\\s*(?:-\\s*)?([^\\n]+)', 'i');
+            const match = text.match(regex);
+            if (!match) return null;
+
+            let result = match[1].trim();
+            // Odstranění informací o alergenech pro čistší vzhled
+            result = result.replace(/\(Alergeny:.*?\)/gi, '').trim();
+            return result.length > 0 ? result : null;
+        }
 
         function renderMenu() {
             const container = document.getElementById('content');
             container.innerHTML = '';
-            
-            const days = menuData[currentWeek];
-            const todayStr = new Date().toLocaleDateString('cs-CZ');
+
+            const days = parsedWeeks[activeWeek];
+
+            if (!days || days.length === 0) {
+                container.innerHTML = `
+                    <div class="status-box">
+                        Pro tento týden nejsou v systému Strava.cz zatím zadána žádná data.
+                    </div>`;
+                return;
+            }
+
+            const today = new Date();
+            const todayStr = `${today.getDate()}. ${today.getMonth() + 1}. ${today.getFullYear()}`;
 
             days.forEach(d => {
-                const isToday = d.date.includes(todayStr.split('.')[0] + '. ' + todayStr.split('.')[1]);
-                
+                const isToday = d.dateStr.replace(/\s+/g, '') === todayStr.replace(/\s+/g, '');
+
                 const card = document.createElement('div');
                 card.className = `day-card ${isToday ? 'today' : ''}`;
 
                 card.innerHTML = `
                     <div class="day-header">
-                        <div>
-                            <span class="day-name">${d.day}</span>
-                            <span class="day-date">${d.date}</span>
-                        </div>
+                        <span class="day-title">${d.title}</span>
                         ${isToday ? '<span class="badge-today">Dnes</span>' : ''}
                     </div>
                     <div class="meal-grid">
@@ -279,13 +341,14 @@
         }
 
         function switchWeek(week) {
-            currentWeek = week;
+            activeWeek = week;
             document.getElementById('btn-this-week').classList.toggle('active', week === 'this');
             document.getElementById('btn-next-week').classList.toggle('active', week === 'next');
             renderMenu();
         }
 
-        renderMenu();
+        // Spuštění živého načtení při otevření stránky
+        fetchMenuData();
     </script>
 </body>
 </html>
