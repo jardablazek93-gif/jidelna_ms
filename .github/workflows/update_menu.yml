@@ -3,7 +3,7 @@ name: Automatická aktualizace jídelníčku
 on:
   schedule:
     # 22:01 UTC v zimním čase = 23:01 / v letním čase 0:01 SEČ
-    - cron: '1 22 * * *'
+    - cron: '1 00 * * 1'
   workflow_dispatch:
 
 jobs:
