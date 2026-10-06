@@ -2,10 +2,9 @@ name: Automatická aktualizace jídelníčku
 
 on:
   schedule:
-    # Běží v neděli ve 20:00 UTC (22:00 SEČ) a Po-Pá v 04:00 UTC (06:00 SEČ)
     - cron: '0 20 * * 0'
     - cron: '0 4 * * 1-5'
-  workflow_dispatch: # Umožní ruční spuštění jedním klikem v GitHubu
+  workflow_dispatch:
 
 jobs:
   update-data:
@@ -15,14 +14,14 @@ jobs:
 
     steps:
       - name: Načtení repozitáře
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Nastavení Pythonu
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Spuštění skriptu pro stavení jídelníčku
+      - name: Spuštění skriptu pro stažení jídelníčku
         run: python fetch_menu.py
 
       - name: Uložení zmeněného data.json do GitHubu
