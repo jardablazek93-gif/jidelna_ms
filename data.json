@@ -1,48 +1,6 @@
 {
   "this": [
     {
-      "title": "Pondělí 12.10.2026",
-      "dateStr": "12.10.2026",
-      "presnidavka": "Cereální houska s lučinou, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Pórková polévka s kapáním",
-      "obed": "Švestkové knedlíky přelité máslem a sypané mákem a cukrem, Ovocný čaj",
-      "svacina": "Chléb Šumava s rybičkovou pomazánkou, Zelenina, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Úterý 13.10.2026",
-      "dateStr": "13.10.2026",
-      "presnidavka": "Vánočka s máslem, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Čočková polévka s krutony",
-      "obed": "Sekaná pečeně s vařenými brambory, Obloha, Ovocný čaj",
-      "svacina": "Chléb Šumava s máslem a plátkovým sýrem, Ovoce, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Středa 14.10.2026",
-      "dateStr": "14.10.2026",
-      "presnidavka": "Jogurt, Rohlík, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Rajčatová polévka s rýží",
-      "obed": "Vepřové maso dušené v kapustě s vařenými brambory, Ovocný čaj",
-      "svacina": "Mistrův chléb, Vajíčková pomazánka, Zelenina, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Čtvrtek 15.10.2026",
-      "dateStr": "15.10.2026",
-      "presnidavka": "Bagetka s máslem a zeleninou, Mléko, Ovocný čaj",
-      "polevka": "Zeleninová polévka s hrachovými vločkami",
-      "obed": "Krůtí nudličky s pórkem, paprikami a rajčaty s jasmínovou rýží, Ovocný čaj",
-      "svacina": "Pudink s piškoty, Ovoce, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Pátek 16.10.2026",
-      "dateStr": "16.10.2026",
-      "presnidavka": "Grahamový rohlík s máslem a medem, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Kuřecí polévka s jáhly",
-      "obed": "Hovězí svíčková na smetaně s houskovými knedlíky, Ovocný čaj",
-      "svacina": "Chléb Šumava s máslem a šunkou, Ovoce, Mléko, Ovocný čaj"
-    }
-  ],
-  "next": [
-    {
       "title": "Pondělí 19.10.2026",
       "dateStr": "19.10.2026",
       "presnidavka": "Kobliha s marmeládou, Ovoce, Mléko, Ovocný čaj",
@@ -81,6 +39,48 @@
       "polevka": "Zeleninová polévka s ovesnými vločkami",
       "obed": "Špagety se sýrovou omáčkou se zeleninou, Ovocný čaj",
       "svacina": "Mistrův chléb s tuňákovou pomazánkou, Zelenina, Mléko, Ovocný čaj"
+    }
+  ],
+  "next": [
+    {
+      "title": "Pondělí 26.10.2026",
+      "dateStr": "26.10.2026",
+      "presnidavka": "Musli s mlékem, Ovoce, Ovocný čaj",
+      "polevka": "Polévka z fazolových lusků",
+      "obed": "Hověží guláš s těstovinami, Ovocný čaj",
+      "svacina": "Mistrův chléb s budapešťskou pomazánkou, Zelenina, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Úterý 27.10.2026",
+      "dateStr": "27.10.2026",
+      "presnidavka": "Grahamový rohlík s máslem a zeleninou, Mléko, Ovocný čaj",
+      "polevka": "Hovězí polévka se sýrovým kapáním",
+      "obed": "Smažený květák s vařenými brambory, Čerstvá zelenina, Yofresh, Ovocný čaj",
+      "svacina": "Chléb Šumava s tvarohovo-mrkvovou pomazánkou, Zelenina, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Středa 28. 10. 2026",
+      "dateStr": "28.10.2026",
+      "presnidavka": "Není zadané",
+      "polevka": "Není zadané",
+      "obed": "Není zadané",
+      "svacina": "Není zadané"
+    },
+    {
+      "title": "Čtvrtek 29.10.2026",
+      "dateStr": "29.10.2026",
+      "presnidavka": "Mistrův chléb s máslem a plátkovým sýrem, Ovoce, Mléko, Ovocný čaj",
+      "polevka": "Cibulová s krutony",
+      "obed": "Rizoto s cizrnou a kořenovou zeleninou, sypané sýrem Gouda, Čerstvá zelenina, Ovocný čaj",
+      "svacina": "Skořicové šneky, Ovoce, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Pátek 30.10.2026",
+      "dateStr": "30.10.2026",
+      "presnidavka": "Cerea-houska s pomazánkovým máslem, Ovoce, Mléko, Ovocný čaj",
+      "polevka": "Zeleninová polévka se špaldovými vločkami",
+      "obed": "Italská kuřecí roláda se sušenými rajčaty se šťouchanými brambory, Obloha, Ovocný čaj",
+      "svacina": "Chléb s bylinkovým máslem, Ovoce, Mléko, Ovocný čaj"
     }
   ]
 }
