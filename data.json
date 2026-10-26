@@ -1,48 +1,6 @@
 {
   "this": [
     {
-      "title": "Pondělí 19.10.2026",
-      "dateStr": "19.10.2026",
-      "presnidavka": "Kobliha s marmeládou, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Krémová zeleninová polévka",
-      "obed": "Rizoto s kuřecím masem sypané sýrem, Okurka, Ovocný čaj",
-      "svacina": "Tmavý toustový chléb s rozhudou, Ovoce, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Úterý 20.10.2026",
-      "dateStr": "20.10.2026",
-      "presnidavka": "Cerea-houska s pomazánkovým máslem, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Bramboračka s houbami",
-      "obed": "Marinovaná vepřová pečeně s dušenou zeleninou a vařenými brambory, Ovocný čaj",
-      "svacina": "Chléb Šumava s máslem a plátkovým sýrem, Ovoce, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Středa 21.10.2026",
-      "dateStr": "21.10.2026",
-      "presnidavka": "Jogurt, Rohlík, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Kuřecí polévka s nudličkami",
-      "obed": "Hovězí znojemská s rýží, Ovocný čaj",
-      "svacina": "Pudink s piškoty, Ovoce, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Čtvrtek 22.10.2026",
-      "dateStr": "22.10.2026",
-      "presnidavka": "Grahamový rohlík s lučinou, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Hrachová polévka s krutonky",
-      "obed": "Na másle pečené filety z aljašské tresky s bramborovou kaší, Čerstvá zelenina, Ovocný čaj",
-      "svacina": "Mistrův chléb se tvarohovo-rajčatovu pomazánkou, Ovoce, Mléko, Ovocný čaj"
-    },
-    {
-      "title": "Pátek 23.10.2026",
-      "dateStr": "23.10.2026",
-      "presnidavka": "Houska s džemovým máslem, Ovoce, Mléko, Ovocný čaj",
-      "polevka": "Zeleninová polévka s ovesnými vločkami",
-      "obed": "Špagety se sýrovou omáčkou se zeleninou, Ovocný čaj",
-      "svacina": "Mistrův chléb s tuňákovou pomazánkou, Zelenina, Mléko, Ovocný čaj"
-    }
-  ],
-  "next": [
-    {
       "title": "Pondělí 26.10.2026",
       "dateStr": "26.10.2026",
       "presnidavka": "Musli s mlékem, Ovoce, Ovocný čaj",
@@ -81,6 +39,48 @@
       "polevka": "Zeleninová polévka se špaldovými vločkami",
       "obed": "Italská kuřecí roláda se sušenými rajčaty se šťouchanými brambory, Obloha, Ovocný čaj",
       "svacina": "Chléb s bylinkovým máslem, Ovoce, Mléko, Ovocný čaj"
+    }
+  ],
+  "next": [
+    {
+      "title": "Pondělí 2.11.2026",
+      "dateStr": "02.11.2026",
+      "presnidavka": "Jogurt, Rohlík, Ovoce, Mléko, Ovocný čaj",
+      "polevka": "Frankfurtská polévka s brambory",
+      "obed": "Vepřový moravský vrabec s dušeným červeným zelím a bramborovými knedlíky, Ovocný čaj",
+      "svacina": "Chléb Šumava s máslem a plátkovým sýrem, Zelenina, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Úterý 3.11.2026",
+      "dateStr": "03.11.2026",
+      "presnidavka": "Chléb Šumava s pomazánkovým máslem, Ovoce, Kakao, Ovocný čaj",
+      "polevka": "Zelňačka s brambory",
+      "obed": "Vepřový guláš s těstovinami, Ovocný čaj",
+      "svacina": "Pudink s piškoty, Ovoce, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Středa 4.11.2026",
+      "dateStr": "04.11.2026",
+      "presnidavka": "Cereální houska s lučinou, Ovoce, Mléko, Ovocný čaj",
+      "polevka": "Krémová fazolová polévka s krutony",
+      "obed": "Krůtí paprikáš s pohankou, Ovocný čaj",
+      "svacina": "Mistrův chléb, Vajíčková pomazánka, Zelenina, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Čtvrtek 5.11.2026",
+      "dateStr": "05.11.2026",
+      "presnidavka": "Kornspitz s máslem a zeleninou, Mléko, Ovocný čaj",
+      "polevka": "Zeleninová s rýžovými vločkami",
+      "obed": "Cizrnové placičky Falafel s pečenými bramborami a salátem Coleslaw, Mléko, Ovocný čaj",
+      "svacina": "Mistrův chléb s tvarohovo-mrkvovou pomazánkou, Mléko, Ovocný čaj"
+    },
+    {
+      "title": "Pátek 6.11.2026",
+      "dateStr": "06.11.2026",
+      "presnidavka": "Houska s máslem a plátkovým sýrem, Ovoce, Mléko, Ovocný čaj",
+      "polevka": "Zeleninová krémová polévka",
+      "obed": "Sekaná svíčková s houskovými knedlíky, Ovocný čaj",
+      "svacina": "Chléb Šumava s pomazánkou z tuňáka, Zelenina, Mléko, Ovocný čaj"
     }
   ]
 }
